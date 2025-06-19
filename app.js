@@ -570,24 +570,29 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
-// Long-press on Chatterbox label for admin access (mobile)
-const chatterboxLabel = document.getElementById('chatterbox-label');
-if (chatterboxLabel) {
-    let pressTimer = null;
-    chatterboxLabel.addEventListener('touchstart', function(e) {
-        pressTimer = setTimeout(function() {
-            const pwd = prompt('Enter admin password:');
-            if (pwd === '1301') {
-                window.location.href = 'https://chatterbox-spec.github.io/admin/';
-            } else if (pwd !== null) {
-                alert('Incorrect password.');
+// Mobile: tap Chatterbox Chat label 5 times fast to open admin password prompt
+(function() {
+    var tapCount = 0;
+    var lastTap = 0;
+    var label = document.querySelector('h2');
+    if (label) {
+        label.addEventListener('touchend', function() {
+            var now = Date.now();
+            if (now - lastTap < 600) {
+                tapCount++;
+            } else {
+                tapCount = 1;
             }
-        }, 600); // 600ms for long-press
-    });
-    chatterboxLabel.addEventListener('touchend', function(e) {
-        clearTimeout(pressTimer);
-    });
-    chatterboxLabel.addEventListener('touchmove', function(e) {
-        clearTimeout(pressTimer);
-    });
-} 
+            lastTap = now;
+            if (tapCount === 5) {
+                tapCount = 0;
+                var pwd = prompt('Enter admin password:');
+                if (pwd === '1301') {
+                    window.location.href = 'https://chatterbox-spec.github.io/admin/';
+                } else if (pwd !== null) {
+                    alert('Incorrect password.');
+                }
+            }
+        });
+    }
+})(); 
