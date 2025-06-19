@@ -568,4 +568,26 @@ window.addEventListener('keydown', function(e) {
             alert('Incorrect password.');
         }
     }
-}); 
+});
+
+// Long-press on Chatterbox label for admin access (mobile)
+const chatterboxLabel = document.getElementById('chatterbox-label');
+if (chatterboxLabel) {
+    let pressTimer = null;
+    chatterboxLabel.addEventListener('touchstart', function(e) {
+        pressTimer = setTimeout(function() {
+            const pwd = prompt('Enter admin password:');
+            if (pwd === '1301') {
+                window.location.href = 'https://chatterbox-spec.github.io/admin/';
+            } else if (pwd !== null) {
+                alert('Incorrect password.');
+            }
+        }, 600); // 600ms for long-press
+    });
+    chatterboxLabel.addEventListener('touchend', function(e) {
+        clearTimeout(pressTimer);
+    });
+    chatterboxLabel.addEventListener('touchmove', function(e) {
+        clearTimeout(pressTimer);
+    });
+} 
