@@ -555,4 +555,17 @@ if (plusChatBtn) {
         e.preventDefault();
         showPrivateChatModal();
     };
-} 
+}
+
+// Secret admin shortcut: Ctrl+Alt+A
+window.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        const pwd = prompt('Enter admin password:');
+        if (pwd === '1301') {
+            window.location.href = 'https://chatterbox-spec.github.io/admin/';
+        } else if (pwd !== null) {
+            alert('Incorrect password.');
+        }
+    }
+}); 
