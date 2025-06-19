@@ -340,6 +340,11 @@ function deleteChatForCurrentUser(otherUid, cb) {
     db.ref('deletedChats/' + currentUser.uid + '/' + otherUid).set(true, cb);
 }
 
+// Helper to restore a deleted chat for the current user
+function restoreChatForCurrentUser(otherUid, cb) {
+    db.ref('deletedChats/' + currentUser.uid + '/' + otherUid).remove(cb);
+}
+
 function renderAllMessages() {
     chatBox.innerHTML = '';
     let ref = db.ref('messages');
@@ -347,23 +352,25 @@ function renderAllMessages() {
     if (privateChatWith) {
         chatForm.style.display = '';
         if (plusChatBtn) plusChatBtn.style.display = 'none';
-        // Only show messages between currentUser and privateChatWith, and only if the current user is one of the two
-        isChatDeleted(privateChatWith, function(isDeleted) {
-            if (isDeleted) {
-                chatForm.style.display = 'none';
-                chatBox.innerHTML = '<div style="text-align:center;color:#888;margin-top:40px;">You deleted this chat. Start a new chat to restore it.</div>';
-                return;
-            }
-            ref.orderByChild('timestamp').on('child_added', function(data) {
-                const val = data.val();
-                if (
-                    (val.uid === currentUser.uid && val.to === privateChatWith) ||
-                    (val.uid === privateChatWith && val.to === currentUser.uid)
-                ) {
-                    addMessage(data);
+        // Restore chat if it was previously deleted
+        restoreChatForCurrentUser(privateChatWith, function() {
+            isChatDeleted(privateChatWith, function(isDeleted) {
+                if (isDeleted) {
+                    chatForm.style.display = 'none';
+                    chatBox.innerHTML = '<div style="text-align:center;color:#888;margin-top:40px;">You deleted this chat. Start a new chat to restore it.</div>';
+                    return;
                 }
+                ref.orderByChild('timestamp').on('child_added', function(data) {
+                    const val = data.val();
+                    if (
+                        (val.uid === currentUser.uid && val.to === privateChatWith) ||
+                        (val.uid === privateChatWith && val.to === currentUser.uid)
+                    ) {
+                        addMessage(data);
+                    }
+                });
+                ref.on('child_removed', removeMessage);
             });
-            ref.on('child_removed', removeMessage);
         });
     } else {
         chatForm.style.display = 'none';
@@ -394,8 +401,23 @@ function renderAllMessages() {
                         ul.className = 'user-list-modal';
                         filteredUids.forEach(function(uid) {
                             const li = document.createElement('li');
-                            li.textContent = userMap[uid] || '(no username)';
                             li.style.cursor = 'pointer';
+                            // Find last message sent by the other user
+                            let lastMsg = '';
+                            let lastMsgTime = 0;
+                            msgSnap.forEach(function(msg) {
+                                const val = msg.val();
+                                if (
+                                    ((val.uid === uid && val.to === currentUser.uid) ||
+                                    (val.uid === uid && val.to === currentUser.uid)) &&
+                                    val.timestamp > lastMsgTime
+                                ) {
+                                    lastMsg = val.message;
+                                    lastMsgTime = val.timestamp;
+                                }
+                            });
+                            li.innerHTML = `<div style='font-weight:600;'>${userMap[uid] || '(no username)'}</div>` +
+                                (lastMsg ? `<div class='last-msg-home'>${lastMsg}</div>` : "");
                             li.onclick = function(e) {
                                 if (e.target.classList.contains('delete-chat-home-btn')) return;
                                 privateChatWith = uid;
@@ -410,7 +432,6 @@ function renderAllMessages() {
                                 ev.stopPropagation();
                                 if (confirm('Delete this private chat? This will only remove it for you.')) {
                                     deleteChatForCurrentUser(uid, function() {
-                                        // Only refresh the chat list, do not remove li directly
                                         if (privateChatWith === uid) {
                                             privateChatWith = null;
                                         }
