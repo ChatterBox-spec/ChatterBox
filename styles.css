@@ -132,30 +132,48 @@ h2 {
 
 .message {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
-    border-radius: 18px 18px 4px 18px;
-    padding: 10px 16px;
-    box-shadow: 0 1px 4px rgba(31,38,135,0.07);
+    align-items: flex-end;
+    max-width: 80%;
+    min-width: 60px;
     font-size: 15px;
     color: #222;
     position: relative;
     animation: fadeIn 0.5s;
-    min-width: 60px;
-    max-width: 90%;
-    margin-left: auto;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    box-shadow: 0 1px 4px rgba(31,38,135,0.07);
 }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.own-message {
+    align-self: flex-end;
+    justify-content: flex-end;
+    background: linear-gradient(90deg, #8ec5fc 0%, #e0c3fc 100%);
+    border-radius: 18px 18px 4px 18px;
+    margin-left: 40px;
+    margin-right: 0;
+    flex-direction: row-reverse;
 }
+.received-message {
+    align-self: flex-start;
+    justify-content: flex-start;
+    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+    border-radius: 18px 18px 18px 4px;
+    margin-right: 40px;
+    margin-left: 0;
+}
+/* Gradient color classes for received messages */
+.msg-color1 { background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%); }
+.msg-color2 { background: linear-gradient(90deg, #fcb69f 0%, #ffecd2 100%); }
+.msg-color3 { background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%); }
+.msg-color4 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); }
+.msg-color5 { background: linear-gradient(90deg, #fddb92 0%, #d1fdff 100%); }
+.msg-color6 { background: linear-gradient(90deg, #fda085 0%, #f6d365 100%); }
 
 .message-text {
     flex: 1;
     word-break: break-word;
-    padding-right: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
 }
 
 .delete-btn {
@@ -332,10 +350,96 @@ h2 {
     position: relative;
     top: 1px;
 }
+.own-message .delete-btn.subtle {
+    margin-right: 8px;
+    margin-left: 0;
+}
 .delete-btn.subtle:hover {
     opacity: 0.8;
     background: #f5f7fa;
 }
 .delete-btn.subtle svg {
     display: block;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(40, 60, 90, 0.25);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(31,38,135,0.18);
+    padding: 32px 28px 24px 28px;
+    min-width: 320px;
+    max-width: 90vw;
+    animation: popIn 0.4s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 1.3rem;
+    color: #2d2d2d;
+    letter-spacing: 0.5px;
+}
+.user-list-modal {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px 0;
+    width: 100%;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.user-list-modal li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px 16px;
+    font-size: 15px;
+    color: #222;
+    box-shadow: 0 1px 4px rgba(31,38,135,0.07);
+}
+.user-list-modal .start-chat-btn {
+    background: linear-gradient(90deg, #8ec5fc 0%, #e0c3fc 100%);
+    color: #222;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+.user-list-modal .start-chat-btn:hover {
+    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+    color: #007bff;
+}
+#close-modal-btn {
+    margin-top: 8px;
+    padding: 10px 24px;
+    background: linear-gradient(90deg, #8ec5fc 0%, #e0c3fc 100%);
+    color: #222;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(142,197,252,0.10);
+    transition: background 0.2s, transform 0.1s;
+}
+#close-modal-btn:hover {
+    background: linear-gradient(90deg, #e0c3fc 0%, #8ec5fc 100%);
+    transform: scale(1.06);
 } 

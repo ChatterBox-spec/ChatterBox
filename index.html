@@ -31,6 +31,8 @@
                 <div id="user-dropdown" class="dropdown-menu" style="display:none;">
                     <button id="edit-username-btn">Edit Username</button>
                     <button id="change-password-btn">Change Password</button>
+                    <button id="private-chat-btn">Start Private Chat</button>
+                    <button id="chats-btn">Chats</button>
                     <button id="logout-btn">Logout</button>
                 </div>
             </div>
@@ -39,6 +41,22 @@
                 <input type="text" id="message" placeholder="Type a message..." required autocomplete="off" />
                 <button type="submit">Send</button>
             </form>
+        </div>
+    </div>
+    <!-- Private Chat Modal -->
+    <div id="private-chat-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <h3>Start Private Chat</h3>
+            <ul id="user-list-modal" class="user-list-modal"></ul>
+            <button id="close-modal-btn">Close</button>
+        </div>
+    </div>
+    <!-- Chats Modal -->
+    <div id="chats-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <h3>Your Chats</h3>
+            <ul id="chats-list-modal" class="user-list-modal"></ul>
+            <button id="close-chats-modal-btn">Close</button>
         </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
