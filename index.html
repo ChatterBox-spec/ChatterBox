@@ -31,16 +31,15 @@
                 <div id="user-dropdown" class="dropdown-menu" style="display:none;">
                     <button id="edit-username-btn">Edit Username</button>
                     <button id="change-password-btn">Change Password</button>
-                    <button id="private-chat-btn">Start Private Chat</button>
-                    <button id="chats-btn">Chats</button>
                     <button id="logout-btn">Logout</button>
                 </div>
             </div>
             <div id="chat-box" class="chat-box"></div>
-            <form id="chat-form">
+            <form id="chat-form" style="display:none;">
                 <input type="text" id="message" placeholder="Type a message..." required autocomplete="off" />
                 <button type="submit">Send</button>
             </form>
+            <button id="plus-chat-btn" title="Start a new chat" class="plus-chat-btn">+</button>
         </div>
     </div>
     <!-- Private Chat Modal -->
